@@ -130,7 +130,7 @@ function LeaveApproval() {
                     <td className="px-4 py-3 text-sm text-gray-500 capitalize">{req.department}</td>
                     <td className="px-4 py-3 text-sm text-gray-500">{req.leaveType}</td>
                     <td className="px-4 py-3 text-sm text-gray-500">
-                      {req.startDate} → {req.endDate}
+                      {req.dates.join(' | ')}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500 max-w-xs truncate">{req.reason}</td>
                     <td className="px-4 py-3">

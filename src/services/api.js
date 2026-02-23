@@ -73,8 +73,10 @@ export const findTodayRecord = async (name, date) => {
 // Sign up – create a new user. Returns the created user object.
 export const registerUser = async (userData) => {
   // Check if email already exists
+ 
   const check = await fetch(`${API_BASE_URL}/users/${userData.email}`);
-  const existing = await check.json();
+  const existing = (await check.json()).data;
+
   if (existing.length > 0) {
     throw new Error("Email already registered");
   }
@@ -152,11 +154,13 @@ export const getAllLeaveRequests = async () => {
 
 // Submit a new leave request (employee action)
 export const createLeaveRequest = async (request) => {
+
   const response = await fetch(`${API_BASE_URL}/leaveRequest`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(request),
   });
+  console.log(response)
   if (!response.ok) {
     throw new Error("Failed to submit leave request");
   }

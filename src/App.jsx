@@ -33,7 +33,7 @@ function App() {
             <div className="flex justify-between h-16">
               <div className="flex items-center">
                 <h1 className="text-xl font-bold text-gray-800">
-                  Employee Clocking System
+                 {/* Mukfin-system */}
                 </h1>
               </div>
 

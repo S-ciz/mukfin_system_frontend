@@ -33,8 +33,9 @@ function Register() {
     setLoading(true)
     try {
       await register(form)
-      // Redirect to clocking page on success
-      navigate('/')
+      // Redirect to login page on success
+      
+     //  navigate('/')
     } catch (err) {
       setError(err.message)
     } finally {
