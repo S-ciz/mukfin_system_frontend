@@ -38,6 +38,31 @@ function LeaveRequest() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+   let approved = requests.filter(item=> item.status === 'granted')
+ let study = approved.filter(p=> p.leaveType == 'Study') || []
+ let annual = approved.filter(p=> p.leaveType == 'Annual') || []
+ let family = approved.filter(p=> p.leaveType == 'Family') || []
+ let maternity = approved.filter(p=> p.leaveType == 'Maternity') || []
+ let paternity = approved.filter(p=> p.leaveType == 'Paternity') || []
+ let sick = approved.filter(p=> p.leaveType == 'Sick') || []
+
+
+
+  function validateLeave(accum)
+  {
+   
+    switch(form.leaveType)
+    {
+       case 'Study': return calcTotalLeaves(study) + accum <= 10;
+       case 'Annual': return calcTotalLeaves(annual) + accum <=15;
+       case 'Family': return calcTotalLeaves(family) + accum <= 3;
+       case 'Maternity': return calcTotalLeaves(maternity) <= 182.5;
+       case 'Paternity': return calcTotalLeaves(paternity) + accum <= 10; 
+    }
+
+    return false;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage({ type: "", text: "" });
@@ -47,16 +72,18 @@ function LeaveRequest() {
       return;
     }
 
-    if (new Date(form.endDate) < new Date(form.startDate)) {
-      setMessage({
-        type: "error",
-        text: "End date cannot be before start date",
-      });
+     const mapped = dates.map((d) => `${d.day} ${d.month.name} ${d.year}`);
+    const countdates = mapped.length;
+
+    if(!validateLeave(countdates)) 
+    {
+       setMessage({ type: "error", text: `You have exceeded your total ${form.leaveType} leaves` });
       return;
     }
 
+  
     try {
-      const mapped = dates.map((d) => `${d.day} ${d.month.name} ${d.year}`);
+    
       await createLeaveRequest({
         userId: user._id,
         name: `${user.name} ${user.surname}`,
@@ -101,13 +128,7 @@ function LeaveRequest() {
   };
 
 
- let approved = requests.filter(item=> item.status === 'granted')
- let study = approved.filter(p=> p.leaveType == 'Study') || []
- let annual = approved.filter(p=> p.leaveType == 'Annual') || []
- let family = approved.filter(p=> p.leaveType == 'Family') || []
- let maternity = approved.filter(p=> p.leaveType == 'Maternity') || []
- let paternity = approved.filter(p=> p.leaveType == 'Peternity') || []
- let sick = approved.filter(p=> p.leaveType == 'Sick') || []
+
 
 
  function calcTotalLeaves(list)
@@ -131,12 +152,12 @@ function LeaveRequest() {
 
       {/* Statistics */}
       <div className="flex flex-wrap justify-between gap-2 mb-3 mt-3">
-        <LeaveStat leaveTaken={calcTotalLeaves(study)} leaveTotal="10" leaveName="Study"/>
-        <LeaveStat leaveTaken={calcTotalLeaves(annual)} leaveTotal="10" leaveName="Annual"/>
-        <LeaveStat leaveTaken={calcTotalLeaves(family)} leaveTotal="10" leaveName="Family"/>
-        <LeaveStat leaveTaken={calcTotalLeaves(maternity)} leaveTotal="10" leaveName="Maternity"/>
-        <LeaveStat leaveTaken={calcTotalLeaves(paternity)} leaveTotal="10" leaveName="Paternity"/>
-        <LeaveStat leaveTaken={calcTotalLeaves(sick)} leaveTotal="10" leaveName="Sick"/>
+        <LeaveStat leaveTaken={calcTotalLeaves(study)} leaveTotal="10 days" leaveName="Study"/>
+        <LeaveStat leaveTaken={calcTotalLeaves(annual)} leaveTotal="15 days" leaveName="Annual"/>
+        <LeaveStat leaveTaken={calcTotalLeaves(family)} leaveTotal="3 days" leaveName="Family"/>
+        <LeaveStat leaveTaken={calcTotalLeaves(maternity)} leaveTotal="182.5 days" leaveName="Maternity"/>
+        <LeaveStat leaveTaken={calcTotalLeaves(paternity)} leaveTotal="10 days" leaveName="Paternity"/>
+        <LeaveStat leaveTaken={calcTotalLeaves(sick)} leaveTotal="36 days" leaveName="Sick"/>
       </div>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Leave Requests</h2>
 
