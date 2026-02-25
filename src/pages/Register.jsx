@@ -133,9 +133,7 @@ function Register() {
             >
               <option value="IT">IT</option>
               <option value="finance">Finance</option>
-              <option value="brokers">Brokers</option>
               <option value="operations">Operations</option>
-              <option value="others">Others</option>
             </select>
           </div>
 
