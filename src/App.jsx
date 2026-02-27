@@ -30,14 +30,14 @@ function App() {
       {user && !isAuthPage && (
         <nav className="bg-white shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
+            <div className="flex justify-between md:h-16">
               <div className="flex items-center">
                 <h1 className="text-xl font-bold text-gray-800">
                  {/* Mukfin-system */}
                 </h1>
               </div>
 
-              <div className="flex items-center space-x-4">
+              <div className=" grid md:flex items-center gap-2 md:gap-0  space-x-4">
                 {/* All roles can clock in/out */}
                 <Link to="/" className={linkClass('/')}>
                   Clocking

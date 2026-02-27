@@ -1,47 +1,52 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Register() {
   const [form, setForm] = useState({
-    name: '',
-    surname: '',
-    email: '',
-    password: '',
-    userType: 'employee',
-    department: 'IT',
-  })
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { register } = useAuth()
-  const navigate = useNavigate()
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    userType: "employee",
+    department: "IT",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError("");
 
     // Basic validation
-    if (!form.name.trim() || !form.surname.trim() || !form.email.trim() || !form.password.trim()) {
-      setError('Please fill in all fields')
-      return
+    if (
+      !form.name.trim() ||
+      !form.surname.trim() ||
+      !form.email.trim() ||
+      !form.password.trim()
+    ) {
+      setError("Please fill in all fields");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
-      await register(form)
+      await register(form);
       // Redirect to login page on success
-      
-     //  navigate('/')
+
+      //  navigate('/')
     } catch (err) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
@@ -54,7 +59,9 @@ function Register() {
           {/* Name & Surname side by side */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -66,7 +73,9 @@ function Register() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Surname</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Surname
+              </label>
               <input
                 type="text"
                 name="surname"
@@ -80,7 +89,9 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -93,7 +104,9 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
             <input
               type="password"
               name="password"
@@ -107,7 +120,9 @@ function Register() {
 
           {/* User type dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
             <select
               name="userType"
               value={form.userType}
@@ -123,7 +138,9 @@ function Register() {
 
           {/* Department dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Department
+            </label>
             <select
               name="department"
               value={form.department}
@@ -131,9 +148,13 @@ function Register() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={loading}
             >
+              <option value="All">All</option>
               <option value="IT">IT</option>
+              <option value="broking">Broking</option>
               <option value="finance">Finance</option>
-              <option value="operations">Operations</option>
+              <option value="retail">Retail</option>
+              <option value="Risk surveyor">Risk surveyor</option>
+              <option value="Treaties and claims">Treaties and claims</option>
             </select>
           </div>
 
@@ -148,19 +169,22 @@ function Register() {
             disabled={loading}
             className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {loading ? 'Creating account...' : 'Sign Up'}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline font-medium">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-blue-600 hover:underline font-medium"
+          >
             Sign In
           </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default Register
+export default Register;

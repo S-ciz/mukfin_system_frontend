@@ -1,7 +1,7 @@
 // Use the Vite proxy path so all requests go through localhost:3000/api → localhost:3001
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/mukfin/api`
 
-// ─── Attendance API ───────────────────────────────────────────────
+// ─── Attendance API ──────────────────────────────────────────────
 
 export const getAttendance = async () => {
   const response = await fetch(`${API_BASE_URL}/attendance`);
@@ -101,10 +101,17 @@ export const loginUser = async (email, password) => {
     },
     body: JSON.stringify({ email: email, password: password }),
   });
+
+
   if (!response.ok) {
     throw new Error("Failed to sign in");
   }
   const users = await response.json();
+  
+  if(users.data == null)
+  {
+    throw new Error(users.message)
+  }
 
   if (users.data.length === 0) {
     throw new Error("Invalid email or password");
