@@ -85,7 +85,7 @@ function App() {
       {isAuthPage ? (
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
-          <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
+          {/* <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} /> */}
         </Routes>
       ) : (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
