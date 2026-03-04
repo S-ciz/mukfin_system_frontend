@@ -16,10 +16,13 @@ function ClockForm({ onRecordUpdate }) {
   const [message, setMessage] = useState({ type: "", text: "" });
 
   const [coord, setCoord] = useState(null);
+  const [country, setCountry] = useState(()=> localStorage.getItem("country"));
 
   useEffect(() => {
     const storage = sessionStorage.getItem("location");
     setCoord(storage ? JSON.parse(storage) : null);
+    const countryLocalStorage = localStorage.getItem("country");
+    setCountry(country ? countryLocalStorage : null);
   }, []);
 
   // Build the display name from the logged-in user
@@ -44,7 +47,7 @@ function ClockForm({ onRecordUpdate }) {
         text: "Allow geolocation to access your device",
       });
       return;
-    } else if (isInRadius(coord) == false) {
+    } else if (isInRadius(coord, country) == false) {
       setLoading(false);
       setMessage({
         type: "error",
@@ -108,7 +111,7 @@ function ClockForm({ onRecordUpdate }) {
         text: "Allow geolocation to access your device",
       });
       return;
-    } else if (isInRadius(coord) == false) {
+    } else if (isInRadius(coord, country) == false) {
       setLoading(false);
       setMessage({
         type: "error",

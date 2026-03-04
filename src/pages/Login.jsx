@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -7,10 +7,15 @@ import { useGeoLocation } from "@custom-react-hooks/use-geo-location";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [country, setCountry] = useState("southAfrica")
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(()=>{
+ localStorage.setItem("country", country)
+  }, [country])
 
   const { loading: Load, coordinates, error: Err } = useGeoLocation();
 
@@ -30,6 +35,7 @@ function Login() {
 
     setLoading(true);
     try {
+       
       await login(email, password);
       // Redirect to clocking page on success
       navigate("/");
@@ -74,6 +80,17 @@ function Login() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={loading}
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Location
+            </label>
+            <select onChange={(e)=> setCountry(e.target.value) } className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="southAfrica">Randburg</option>
+              <option value="zimbabwe">SkyBridge</option>
+              <option value="zambia">Zambia</option>
+              <option value="botswana">Botswana</option>
+            </select>
           </div>
 
           {error && (
