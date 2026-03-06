@@ -8,6 +8,7 @@ import { createLeaveRequest, getLeaveRequestsByUserId } from "../services/api";
 
 function LeaveRequest() {
   const { user } = useAuth();
+  const [toggleForm, setToggleForm] = useState(false);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState([]);
@@ -176,85 +177,92 @@ function LeaveRequest() {
           leaveName="Sick"
         />
       </div>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Leave Requests</h2>
+
+      <div className="flex justify-between items-center py-3 flex-wrap gap-3">
+   <h2 className="text-2xl font-bold text-gray-800 mb-6">Create new request</h2>
+   <button onClick={()=> setToggleForm(!toggleForm)} className={ !toggleForm ? "bg-green-700 py-2 px-5 text-white rounded-lg": "bg-red-500 py-2 px-5 text-white rounded-lg" }> { !toggleForm ? "+ Add leave": "Collapse form" } </button>
+      </div>
+   
 
       {/* ─── Submit form ─── */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          Submit New Request
-        </h3>
+      {toggleForm && (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Submit New Request
+          </h3>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Leave Type
+                </label>
+                <select
+                  name="leaveType"
+                  value={form.leaveType}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="Annual">Annual</option>
+                  <option value="Family">Family Responsibility</option>
+                  <option value="Maternity">Maternity</option>
+                  <option value="Paternity">Paternity</option>
+                  <option value="Sick">Sick</option>
+
+                  <option value="Study">Study</option>
+                </select>
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Leave Type
+                Select days
               </label>
-              <select
-                name="leaveType"
-                value={form.leaveType}
+
+              <DatePicker
+                style={{ height: "2rem", padding: "1rem" }}
+                multiple
+                value={dates}
+                onChange={setDates}
+                format="MMMM DD YYYY"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Reason
+              </label>
+              <textarea
+                name="reason"
+                value={form.reason}
                 onChange={handleChange}
+                rows={3}
+                placeholder="Describe the reason for your leave..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {message.text && (
+              <div
+                className={`p-3 rounded-md text-sm ${
+                  message.type === "success"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
               >
-                <option value="Annual">Annual</option>
-                <option value="Family">Family Responsibility</option>
-                <option value="Maternity">Maternity</option>
-                <option value="Paternity">Paternity</option>
-                <option value="Sick">Sick</option>
+                {message.text}
+              </div>
+            )}
 
-                <option value="Study">Study</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Select days
-            </label>
-
-            <DatePicker
-              style={{ height: "2rem", padding: "1rem" }}
-              multiple
-              value={dates}
-              onChange={setDates}
-              format="MMMM DD YYYY"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Reason
-            </label>
-            <textarea
-              name="reason"
-              value={form.reason}
-              onChange={handleChange}
-              rows={3}
-              placeholder="Describe the reason for your leave..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          {message.text && (
-            <div
-              className={`p-3 rounded-md text-sm ${
-                message.type === "success"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
-              {message.text}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          >
-            Submit Request
-          </button>
-        </form>
-      </div>
+              Submit Request
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* My rewquet statistics */}
       <div className="flex gap-2 justify-between items-center flex-wrap my-5"></div>
