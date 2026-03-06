@@ -179,10 +179,21 @@ function LeaveRequest() {
       </div>
 
       <div className="flex justify-between items-center py-3 flex-wrap gap-3">
-   <h2 className="text-2xl font-bold text-gray-800 mb-6">Create new request</h2>
-   <button onClick={()=> setToggleForm(!toggleForm)} className={ !toggleForm ? "bg-green-700 py-2 px-5 text-white rounded-lg": "bg-red-500 py-2 px-5 text-white rounded-lg" }> { !toggleForm ? "+ Add leave": "Collapse form" } </button>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Create new request
+        </h2>
+        <button
+          onClick={() => setToggleForm(!toggleForm)}
+          className={
+            !toggleForm
+              ? "bg-green-700 py-2 px-5 text-white rounded-lg"
+              : "bg-red-500 py-2 px-5 text-white rounded-lg"
+          }
+        >
+          {" "}
+          {!toggleForm ? "+ Add leave" : "Collapse form"}{" "}
+        </button>
       </div>
-   
 
       {/* ─── Submit form ─── */}
       {toggleForm && (
