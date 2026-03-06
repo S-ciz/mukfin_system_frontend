@@ -51,7 +51,7 @@ function ClockForm({ onRecordUpdate }) {
       setLoading(false);
       setMessage({
         type: "error",
-        text: "You are more than 0.3km away from the MUKFIN office in Randburg!",
+        text: `You are more than 0.3km away from the MUKFIN office in ${country}!`,
       });
 
       return;
@@ -115,7 +115,7 @@ function ClockForm({ onRecordUpdate }) {
       setLoading(false);
       setMessage({
         type: "error",
-        text: "You are more than 1.5km away from the MUKFIN office in Randburg!",
+        text: `You are more than 0.3km away from the MUKFIN office in ${country}!`,
       });
 
       return;
