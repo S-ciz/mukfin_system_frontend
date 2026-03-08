@@ -70,6 +70,22 @@ export const findTodayRecord = async (name, date) => {
 
 // ─── User / Auth API ──────────────────────────────────────────────
 
+// PATCH: UPDATE user's annual leave
+
+export async function updateUserAnnualLeave(userId, newLeave)  
+{
+     const response = await fetch(`${API_BASE_URL}/users/${userId}/${newLeave}`, {
+      method: "PATCH",  headers: { "Content-Type": "application/json" },
+     });
+
+     if(!response) 
+     {
+      throw new Error("Could not update user's leave")
+     }
+
+     return response.json()
+}
+
 // Sign up – create a new user. Returns the created user object.
 export const registerUser = async (userData) => {
   // Check if email already exists

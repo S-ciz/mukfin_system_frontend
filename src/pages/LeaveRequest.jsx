@@ -1,14 +1,17 @@
 import DatePicker from "react-multi-date-picker";
 
 import LeaveStat from "../components/LeaveStates";
+import YearLeaveComp from "../components/YearLeaveComp";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { createLeaveRequest, getLeaveRequestsByUserId } from "../services/api";
+import { getUsers } from "../services/api";
 
 function LeaveRequest() {
   const { user } = useAuth();
-  const [toggleForm, setToggleForm] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [toggleForm, setToggleForm] = useState(true);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState([]);
@@ -17,6 +20,17 @@ function LeaveRequest() {
     leaveType: "Annual",
     reason: "",
   });
+
+  async function fetchUsers() {
+    let data = await getUsers();
+    
+    const mapped = data.data.map((item) => {
+      const { _id, name, surname, outstanding_annual } = item;
+
+      return { _id, name, surname, outstanding_annual };
+    });
+    setUsers(mapped);
+  }
 
   // Fetch this user's leave requests on mount
   const fetchRequests = async () => {
@@ -33,6 +47,7 @@ function LeaveRequest() {
 
   useEffect(() => {
     fetchRequests();
+    fetchUsers();
   }, []);
 
   const handleChange = (e) => {
@@ -50,7 +65,7 @@ function LeaveRequest() {
   function validateLeave(accum) {
     switch (form.leaveType) {
       case "Annual":
-        return calcTotalLeaves(annual) + accum <= 15;
+        return calcTotalLeaves(annual) + accum <= user.outstanding_annual;
       case "Study":
         return calcTotalLeaves(study) + accum <= 10;
       case "Sick":
@@ -153,7 +168,7 @@ function LeaveRequest() {
         />
         <LeaveStat
           leaveTaken={calcTotalLeaves(annual)}
-          leaveTotal="15 days"
+          leaveTotal={ `${user.outstanding_annual} days`}
           leaveName="Annual"
         />
         <LeaveStat
@@ -186,8 +201,8 @@ function LeaveRequest() {
           onClick={() => setToggleForm(!toggleForm)}
           className={
             !toggleForm
-              ? "bg-green-700 py-2 px-5 text-white rounded-lg"
-              : "bg-red-500 py-2 px-5 text-white rounded-lg"
+              ? "bg-white py-2 px-5 text-gray-900 rounded-lg"
+              : "bg-white py-2 px-5 text-red-500 rounded-lg"
           }
         >
           {" "}
@@ -358,6 +373,9 @@ function LeaveRequest() {
           </div>
         )}
       </div>
+
+      {/* Year leave component */}
+      {user.userType == "hr" && <YearLeaveComp list={users} />}
     </div>
   );
 }
