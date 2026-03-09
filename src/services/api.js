@@ -1,5 +1,6 @@
 // Use the Vite proxy path so all requests go through localhost:3000/api → localhost:3001
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/mukfin/api`
+const ANNUAL_LEAVE_RATE = 1.25
 
 // ─── Attendance API ──────────────────────────────────────────────
 
@@ -132,8 +133,35 @@ export const loginUser = async (email, password) => {
   if (users.data.length === 0) {
     throw new Error("Invalid email or password");
   }
+
+  checkLastLeaveUpdate(users.data[0])
   return users.data[0];
 };
+
+
+export const checkLastLeaveUpdate = async (user)=>{
+ 
+  const lastUpdatedKey = user.lastUpdated
+  let now = new Date();
+  let currMonth = now.getMonth()
+  let currYear = now.getFullYear();
+  let updateKey = `${currYear}-${currMonth}`
+
+  if(lastUpdatedKey !== updateKey) 
+  { 
+    //update annual leave
+     await updateUserAnnualLeave(user._id, user.outstanding_annual + ANNUAL_LEAVE_RATE);
+     //update last updated
+    await fetch(`${API_BASE_URL}/lastUpdate/${user._id}`, {
+      method: 'PATCH',
+        headers: {
+      "Content-Type": "application/json",
+    },
+    })
+   
+  }
+
+}
 
 // Fetch all users (used by managers/HR to resolve department members)
 export const getUsers = async () => {

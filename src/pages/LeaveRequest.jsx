@@ -160,35 +160,35 @@ function LeaveRequest() {
   return (
     <div>
       {/* Statistics */}
-      <div className="flex flex-wrap justify-between gap-2 mb-3 mt-3">
+      <div className="md:grid md:grid-cols-3 grid gap-2 mb-3 mt-3">
         <LeaveStat
           leaveTaken={calcTotalLeaves(study)}
-          leaveTotal="10 days"
+          leaveTotal={10}
           leaveName="Study"
         />
         <LeaveStat
           leaveTaken={calcTotalLeaves(annual)}
-          leaveTotal={ `${user.outstanding_annual} days`}
+          leaveTotal={ user.outstanding_annual}
           leaveName="Annual"
         />
         <LeaveStat
           leaveTaken={calcTotalLeaves(family)}
-          leaveTotal="3 days"
+          leaveTotal={3}
           leaveName="Family"
         />
         <LeaveStat
           leaveTaken={calcTotalLeaves(maternity)}
-          leaveTotal="182.5 days"
+          leaveTotal={182.5}
           leaveName="Maternity"
         />
         <LeaveStat
           leaveTaken={calcTotalLeaves(paternity)}
-          leaveTotal="10 days"
+          leaveTotal={10}
           leaveName="Paternity"
         />
         <LeaveStat
           leaveTaken={calcTotalLeaves(sick)}
-          leaveTotal="36 days"
+          leaveTotal={36}
           leaveName="Sick"
         />
       </div>
