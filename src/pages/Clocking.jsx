@@ -8,6 +8,8 @@ import {
   getUsers,
 } from "../services/api";
 
+import ExportToExcel from "../components/ExportToExcel";
+
 // RBAC on Clocking page:
 //   Employee → sees only their own attendance
 //   Manager  → sees their own + employees in their department
@@ -16,6 +18,8 @@ function Clocking() {
   const { user } = useAuth();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
 
   const fetchRecords = async () => {
     try {
@@ -56,13 +60,16 @@ function Clocking() {
         Employee Clocking
       </h2>
       <ClockForm onRecordUpdate={fetchRecords} />
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">
-        Attendance Records
-        {user.userType === "manager" && (
-          <span className="text-sm font-normal text-gray-500 ml-2">
-            (Department: {user.department})
-          </span>
-        )}
+      <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center justify-between">
+        <span>
+          {" "}
+          Attendance Records
+          {user.userType === "manager" && (
+            <span className="text-sm font-normal text-gray-500 ml-2">
+              (Department: {user.department})
+            </span>
+          )}
+        </span>
       </h3>
       <AttendanceTable records={records} loading={loading} />
     </div>

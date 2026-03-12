@@ -6,6 +6,8 @@ import AttendanceHistory from '../components/AttendanceHistory'
 import { BarChart, PieChart, StatCard } from '../components/Charts'
 import { getAttendance, getAttendanceByUserId, getUsers } from '../services/api'
 
+//excel 
+import ExportToExcel from '../components/ExportToExcel'
 // RBAC on Analytics page:
 //   Employee → sees only their own analytics
 //   Manager  → sees analytics for their department
@@ -47,6 +49,22 @@ function Analytics() {
 
     fetchRecords()
   }, [])
+
+    function mappedRecordsForFileSave() {
+    const mapped = records.map((item) => {
+      return {
+        name: item.name,
+        date: item.date,
+        day: item.day,
+        "clock-in": item.clockIn,
+        "clock-in-time": item.clockInTime,
+        "clock-out": item.clockOut,
+        "clock-out-time": item.clockOutTime,
+      };
+    });
+
+    return mapped;
+  }
 
   const filteredRecords = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -208,7 +226,10 @@ function Analytics() {
         </div>
       )}
 
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">Attendance Records</h3>
+     <div className="flex items-center gap-3 flex-wrap justify-between mb-4">
+       <h3 className="text-lg  font-semibold text-gray-800">Attendance Records</h3>
+       <ExportToExcel data={mappedRecordsForFileSave()} filename={"Attendance record"}/>
+     </div>
       <AttendanceTable
         records={filteredRecords.sort((a, b) => new Date(b.date) - new Date(a.date))}
         loading={loading}

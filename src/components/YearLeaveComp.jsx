@@ -55,7 +55,7 @@ const YearLeaveComp = ({ list }) => {
           {" "}
           <button
             onClick={() => setHidden(!hidden)}
-            className="bg-white px-5 text"
+            className="bg-white hover:bg-blue-500 hover:text-white px-5 py-1 text rounded-lg text-sm"
           >
             {hidden ? "Hide" : "Show"}
           </button>{" "}
