@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import LeaveRequest from './pages/LeaveRequest'
 import LeaveApproval from './pages/LeaveApproval'
+import Chat from './pages/Chat'
 
 function App() {
   const location = useLocation()
@@ -107,6 +108,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+             <Route path='/chat' element= { <PrivateRoute> <Chat/> </PrivateRoute> }/>
             <Route
               path="/leave"
               element={

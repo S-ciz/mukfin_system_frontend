@@ -8,12 +8,15 @@ import { useAuth } from "../context/AuthContext";
 import { createLeaveRequest, getLeaveRequestsByUserId } from "../services/api";
 import { getUsers } from "../services/api";
 
+import { Link } from "react-router-dom";
+
 function LeaveRequest() {
   const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [toggleForm, setToggleForm] = useState(true);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [manager, setManager] = useState(null)
   const [dates, setDates] = useState([]);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [form, setForm] = useState({
@@ -32,6 +35,25 @@ function LeaveRequest() {
     setUsers(mapped);
   }
 
+  const fetchManager = async ()=>{
+
+    let res = await getUsers()
+   let currUser = JSON.parse(window.sessionStorage.getItem('user'))
+
+    if(currUser.userType == 'hr') 
+    {
+    let hr = res.data.find(item=>item.userType == 'hr' )
+    setManager(hr)
+    }else 
+    {
+          let manager = res.data.find(item=> item.department == currUser.department && item.userType == 'manager' )
+    setManager(manager)
+    }
+
+
+  
+  }
+
   // Fetch this user's leave requests on mount
   const fetchRequests = async () => {
     try {
@@ -48,6 +70,7 @@ function LeaveRequest() {
   useEffect(() => {
     fetchRequests();
     fetchUsers();
+    fetchManager();
   }, []);
 
   const handleChange = (e) => {
@@ -295,7 +318,7 @@ function LeaveRequest() {
       {/* ─── My requests table ─── */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <h3 className="text-lg font-semibold text-gray-800 p-6 pb-0">
-          My Leave Requests
+          My Leave Requests { requests.length > 0  && user.userType !== 'hr'  && <Link onClick={()=>  window.sessionStorage.setItem("chatId", manager._id)} to={"/chat"}> 🗨️ </Link> }
         </h3>
 
         {loading ? (

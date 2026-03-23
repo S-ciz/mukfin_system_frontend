@@ -5,8 +5,7 @@ import {
   getAllLeaveRequests,
   updateLeaveRequest,
 } from "../services/api";
-
-// get
+import { Link } from "react-router-dom";
 
 import ExportToExcel from "../components/ExportToExcel";
 
@@ -27,6 +26,7 @@ function LeaveApproval() {
         // Manager – only their department
         data = (await getLeaveRequestsByDepartment(user.department)).data;
       }
+    
       setRequests(data);
     } catch (err) {
       console.error("Failed to fetch leave requests:", err);
@@ -120,7 +120,10 @@ function LeaveApproval() {
           {user.userType === "manager" && `(${user.department})`}
         </h2>
 
-        <ExportToExcel data={formatMappedRequestForExcel()} filename={"Leave approvals"} />
+        <ExportToExcel
+          data={formatMappedRequestForExcel()}
+          filename={"Leave approvals"}
+        />
       </section>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -219,6 +222,10 @@ function LeaveApproval() {
                             >
                               Reject
                             </button>
+                            <Link onClick={()=> sessionStorage.setItem('chatId', req.userId )} to={"/chat"}  className="bg-white shadow-lg px-3 py-1 rounded-lg">
+                              {" "}
+                              💬
+                            </Link>
                           </div>
                         )}
 
@@ -241,6 +248,10 @@ function LeaveApproval() {
                             >
                               Reject
                             </button>
+                              <Link onClick={()=> sessionStorage.setItem('chatId', req.userId )} to={"/chat"}  className="bg-white shadow-lg px-3 py-1 rounded-lg">
+                              {" "}
+                              💬
+                            </Link>
                           </div>
                         )}
 

@@ -230,3 +230,29 @@ export const updateLeaveRequest = async (id, updates) => {
   }
   return response.json();
 };
+
+
+// chat
+export async function sendMessage(sender, receiver, message) 
+{
+   const response = await fetch(`${API_BASE_URL}/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json"},
+    body: JSON.stringify({"sender": sender, "receiver": receiver, "message": message})
+   })
+     if (!response.ok) {
+    throw new Error("Failed send a message");
+  }
+  return response.json();
+}
+
+export async function getMessageBetweenTwoChats(user1, user2) 
+{
+   const response = await fetch(`${API_BASE_URL}/chat/${user1}/${user2}`)
+     if (!response.ok) {
+    throw new Error("Failed get message list between two chats");
+  }
+  return response.json();
+}
+
+
