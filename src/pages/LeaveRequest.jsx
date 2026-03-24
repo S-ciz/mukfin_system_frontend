@@ -40,11 +40,11 @@ function LeaveRequest() {
     let res = await getUsers()
    let currUser = JSON.parse(window.sessionStorage.getItem('user'))
 
-    if(currUser.userType == 'hr') 
+    if(currUser.userType == 'manager') 
     {
     let hr = res.data.find(item=>item.userType == 'hr' )
     setManager(hr)
-    }else 
+    }else if(currUser.userType == 'employee') 
     {
           let manager = res.data.find(item=> item.department == currUser.department && item.userType == 'manager' )
     setManager(manager)
